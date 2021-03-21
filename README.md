@@ -1,17 +1,17 @@
-# GitHub OpenID Connect Wrapper for Cognito
+# Slack OpenID Connect Wrapper for Cognito
 
-[![Build Status](https://travis-ci.org/TimothyJones/github-cognito-openid-wrapper.svg?branch=master)](https://travis-ci.org/TimothyJones/github-cognito-openid-wrapper)
-[![Maintainability](https://api.codeclimate.com/v1/badges/f787719be529b1c0e8ee/maintainability)](https://codeclimate.com/github/TimothyJones/github-openid-wrapper/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/f787719be529b1c0e8ee/test_coverage)](https://codeclimate.com/github/TimothyJones/github-openid-wrapper/test_coverage)
-[![Known Vulnerabilities](https://snyk.io/test/github/TimothyJones/github-cognito-openid-wrapper/badge.svg?targetFile=package.json)](https://snyk.io/test/github/TimothyJones/github-cognito-openid-wrapper?targetFile=package.json)
+[![Build Status](https://travis-ci.org/TimothyJones/slack-cognito-openid-wrapper.svg?branch=master)](https://travis-ci.org/TimothyJones/slack-cognito-openid-wrapper)
+[![Maintainability](https://api.codeclimate.com/v1/badges/f787719be529b1c0e8ee/maintainability)](https://codeclimate.com/slack/TimothyJones/slack-openid-wrapper/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/f787719be529b1c0e8ee/test_coverage)](https://codeclimate.com/slack/TimothyJones/slack-openid-wrapper/test_coverage)
+[![Known Vulnerabilities](https://snyk.io/test/slack/TimothyJones/slack-cognito-openid-wrapper/badge.svg?targetFile=package.json)](https://snyk.io/test/slack/TimothyJones/slack-cognito-openid-wrapper?targetFile=package.json)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-Do you want to add GitHub as an OIDC (OpenID Connect) provider to an AWS Cognito User Pool? Have you run in to trouble because GitHub only provides OAuth2.0 endpoints, and doesn't support OpenID Connect?
+Do you want to add Slack as an OIDC (OpenID Connect) provider to an AWS Cognito User Pool? Have you run in to trouble because Slack only provides OAuth2.0 endpoints, and doesn't support OpenID Connect?
 
-This project allows you to wrap your GitHub OAuth App in an OpenID Connect layer, allowing you to use it with AWS Cognito.
+This project allows you to wrap your Slack OAuth App in an OpenID Connect layer, allowing you to use it with AWS Cognito.
 
 Here are some questions you may immediately have:
 
@@ -24,17 +24,17 @@ Here are some questions you may immediately have:
   user identity data, any shim must be custom written for the particular OAuth
   implementation that's wrapped.
 
-- **GitHub is very popular, has someone written this specific custom wrapper
+- **Slack is very popular, has someone written this specific custom wrapper
   before?** As far as I can tell, if it has been written, it has not been open
   sourced. Until now!
 
 ## Project overview
 
-When deployed, this project sits between Cognito and GitHub:
+When deployed, this project sits between Cognito and Slack:
 
 ![Overview](docs/overview.png)
 
-This allows you to use GitHub as an OpenID Identity Provider (IdP) for federation with a Cognito User Pool.
+This allows you to use Slack as an OpenID Identity Provider (IdP) for federation with a Cognito User Pool.
 
 The project implements everything needed by the [OIDC User Pool IdP authentication flow](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-oidc-flow.html) used by Cognito.
 
@@ -68,11 +68,11 @@ You will need to:
 
 - Create a Cognito User Pool ([instructions](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pool-as-user-directory.html)).
 - Configure App Integration for your User Pool ([instructions](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-configuring-app-integration.html)). Note down the domain name.
-- Create a GitHub OAuth App ([instructions](https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/), with the following settings:
+- Create a Slack OAuth App ([instructions](https://developer.slack.com/apps/building-oauth-apps/creating-an-oauth-app/), with the following settings:
   - Authorization callback URL: `https://<Your Cognito Domain>/oauth2/idpresponse`
   - Note down the Client ID and secret
 
-(If you use GitHub Enterprise, you need the API & Login URL. This is usually `https://<GitHub Enterprise Host>/api/v3` and `https://<GitHub Enterprise Host>`.)
+(If you use Slack Enterprise, you need the API & Login URL. This is usually `https://<Slack Enterprise Host>/api/v3` and `https://<Slack Enterprise Host>`.)
 
 Next you need to decide if you'd like to deploy with lambda/API Gateway (follow Step 2a), or as a node server (follow Step 2b)
 
@@ -112,7 +112,7 @@ Next you need to decide if you'd like to deploy with lambda/API Gateway (follow 
 ### 3: Finalise Cognito configuration
 
 - Configure the OIDC integration in AWS console for Cognito (described below, but following [these instructions](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-oidc-idp.html)). The following settings are required:
-  - Client ID: The GitHub Client ID above
+  - Client ID: The Slack Client ID above
   - Authorize scope: `openid read:user user:email`
   - Issuer: `https://<Your API Gateway DNS name>/${Stage_Name}` or `https://<your webserver>/` (for the node server).
   - If you have deployed the web app: Run discovery (big blue button next to Issuer).
@@ -156,8 +156,8 @@ used for determining whether a user is allowed to access a resource (like
 private user profile data). In order to do this, it's usually necessary for
 _authentication_ of the user to happen before authorisation.
 
-This means that most OAuth2.0 implementations (including GitHub) [include authentication in a step of the authorisation process](https://medium.com/@darutk/new-architecture-of-oauth-2-0-and-openid-connect-implementation-18f408f9338d).
-For all practical purposes, most OAuth2.0 implementations (including GitHub)can
+This means that most OAuth2.0 implementations (including Slack) [include authentication in a step of the authorisation process](https://medium.com/@darutk/new-architecture-of-oauth-2-0-and-openid-connect-implementation-18f408f9338d).
+For all practical purposes, most OAuth2.0 implementations (including Slack)can
 be thought of as providing both authorisation and authentication.
 
 Below is a diagram of the authentication code flow for OAuth:
@@ -184,14 +184,14 @@ describing the authenticated user can be accessed.
 OpenID Connect describes a standard way to get user data, and is therefore a good choice
 for identity federation.
 
-### A custom shim for GitHub
+### A custom shim for Slack
 
-This project provides the OpenID shim to wrap GitHub's OAuth implementation, by combining the two
+This project provides the OpenID shim to wrap Slack's OAuth implementation, by combining the two
 diagrams:
 
-![GitHub Shim](docs/shim.svg)
+![Slack Shim](docs/shim.svg)
 
-The userinfo request is handled by joining two GitHub API requests: `/user` and `/user/emails`.
+The userinfo request is handled by joining two Slack API requests: `/user` and `/user/emails`.
 
 You can compare this workflow to the documented Cognito workflow [here](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-oidc-flow.html)
 
@@ -233,8 +233,8 @@ You can compare this workflow to the documented Cognito workflow [here](https://
 Tests are provided with [Jest](https://jestjs.io/) using
 [`chai`'s `expect`](http://www.chaijs.com/api/bdd/), included by a shim based on [this blog post](https://medium.com/@RubenOostinga/combining-chai-and-jest-matchers-d12d1ffd0303).
 
-[Pact](http://pact.io) consumer tests for the GitHub API connection are provided
-in `src/github.pact.test.js`. There is currently no provider validation performed.
+[Pact](http://pact.io) consumer tests for the Slack API connection are provided
+in `src/slack.pact.test.js`. There is currently no provider validation performed.
 
 #### Private key
 
@@ -267,7 +267,7 @@ A full OpenID implementation would also include:
 
 **Known issues**
 
-See [the issue tracker](https://github.com/TimothyJones/github-cognito-openid-wrapper/issues) for an up to date list.
+See [the issue tracker](https://slack.com/TimothyJones/slack-cognito-openid-wrapper/issues) for an up to date list.
 
 ## Extending
 
@@ -275,18 +275,18 @@ This section contains pointers if you would like to extend this shim.
 
 ### Using other OAuth providers
 
-If you want to use a provider other than GitHub, you'll need to change the contents of `userinfo` in `src/openid.js`.
+If you want to use a provider other than Slack, you'll need to change the contents of `userinfo` in `src/openid.js`.
 
-### Using a custom GitHub location
+### Using a custom Slack location
 
-If you're using an on-site GitHub install, you will need to change the API
-endpoints used when the `github` object is initialised.
+If you're using an on-site Slack install, you will need to change the API
+endpoints used when the `slack` object is initialised.
 
 ### Including additional user information
 
-If you want to include custom claims based on other GitHub data,
+If you want to include custom claims based on other Slack data,
 you can extend `userinfo` in `src/openid.js`. You may need to add extra API
-client calls in `src/github.js`
+client calls in `src/slack.js`
 
 ## Contributing
 
@@ -297,11 +297,11 @@ Contributions are welcome, especially for the missing features! Pull requests an
 ### How do I use this to implement Cognito logins in my app?
 
 Login requests from your app go directly to Cognito, rather than this shim.
-This is because the shim sits only between Cognito and GitHub, not between your
-app and GitHub. See the [Cognito app integration instructions](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-app-integration.html)
+This is because the shim sits only between Cognito and Slack, not between your
+app and Slack. See the [Cognito app integration instructions](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-app-integration.html)
 for more details.
 
-### Can I use this shim to connect to GitHub directly from another OpenID client?
+### Can I use this shim to connect to Slack directly from another OpenID client?
 
 Yes. This implementation isn't complete, as it focusses exclusively on
 Cognito's requirements. However, it does follow the OpenID spec, and is
@@ -325,17 +325,17 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/TimothyJones"><img src="https://avatars1.githubusercontent.com/u/914369?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Timothy Jones</b></sub></a><br /><a href="https://github.com/TimothyJones/github-cognito-openid-wrapper/commits?author=TimothyJones" title="Code">💻</a> <a href="https://github.com/TimothyJones/github-cognito-openid-wrapper/commits?author=TimothyJones" title="Documentation">📖</a> <a href="#maintenance-TimothyJones" title="Maintenance">🚧</a> <a href="#question-TimothyJones" title="Answering Questions">💬</a> <a href="#infra-TimothyJones" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
-    <td align="center"><a href="https://github.com/bethesque"><img src="https://avatars1.githubusercontent.com/u/446228?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Beth Skurrie</b></sub></a><br /><a href="#ideas-bethesque" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="https://github.com/derjust"><img src="https://avatars0.githubusercontent.com/u/2053353?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Sebastian J.</b></sub></a><br /><a href="https://github.com/TimothyJones/github-cognito-openid-wrapper/commits?author=derjust" title="Code">💻</a> <a href="#infra-derjust" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
-    <td align="center"><a href="http://dannydouglass.com/"><img src="https://avatars1.githubusercontent.com/u/266481?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Danny Douglass</b></sub></a><br /><a href="https://github.com/TimothyJones/github-cognito-openid-wrapper/commits?author=DannyDouglass" title="Code">💻</a></td>
-    <td align="center"><a href="https://bridgecrew.io/"><img src="https://avatars0.githubusercontent.com/u/23154756?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Livnoni</b></sub></a><br /><a href="https://github.com/TimothyJones/github-cognito-openid-wrapper/commits?author=livnoni" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/BFUculsion"><img src="https://avatars0.githubusercontent.com/u/36120475?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Benjamin Follis</b></sub></a><br /><a href="#infra-BFUculsion" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
-    <td align="center"><a href="http://youngbloods.org/"><img src="https://avatars3.githubusercontent.com/u/6947?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Carl Youngblood</b></sub></a><br /><a href="#infra-cayblood" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+    <td align="center"><a href="https://slack.com/TimothyJones"><img src="https://avatars1.slackusercontent.com/u/914369?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Timothy Jones</b></sub></a><br /><a href="https://slack.com/TimothyJones/slack-cognito-openid-wrapper/commits?author=TimothyJones" title="Code">💻</a> <a href="https://slack.com/TimothyJones/slack-cognito-openid-wrapper/commits?author=TimothyJones" title="Documentation">📖</a> <a href="#maintenance-TimothyJones" title="Maintenance">🚧</a> <a href="#question-TimothyJones" title="Answering Questions">💬</a> <a href="#infra-TimothyJones" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+    <td align="center"><a href="https://slack.com/bethesque"><img src="https://avatars1.slackusercontent.com/u/446228?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Beth Skurrie</b></sub></a><br /><a href="#ideas-bethesque" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://slack.com/derjust"><img src="https://avatars0.slackusercontent.com/u/2053353?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Sebastian J.</b></sub></a><br /><a href="https://slack.com/TimothyJones/slack-cognito-openid-wrapper/commits?author=derjust" title="Code">💻</a> <a href="#infra-derjust" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+    <td align="center"><a href="http://dannydouglass.com/"><img src="https://avatars1.slackusercontent.com/u/266481?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Danny Douglass</b></sub></a><br /><a href="https://slack.com/TimothyJones/slack-cognito-openid-wrapper/commits?author=DannyDouglass" title="Code">💻</a></td>
+    <td align="center"><a href="https://bridgecrew.io/"><img src="https://avatars0.slackusercontent.com/u/23154756?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Livnoni</b></sub></a><br /><a href="https://slack.com/TimothyJones/slack-cognito-openid-wrapper/commits?author=livnoni" title="Code">💻</a></td>
+    <td align="center"><a href="https://slack.com/BFUculsion"><img src="https://avatars0.slackusercontent.com/u/36120475?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Benjamin Follis</b></sub></a><br /><a href="#infra-BFUculsion" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+    <td align="center"><a href="http://youngbloods.org/"><img src="https://avatars3.slackusercontent.com/u/6947?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Carl Youngblood</b></sub></a><br /><a href="#infra-cayblood" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://deh.li/"><img src="https://avatars0.githubusercontent.com/u/5856011?v=4?s=100" width="100px;" alt=""/><br /><sub><b>c.p.</b></sub></a><br /><a href="#infra-dehli" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
-    <td align="center"><a href="http://www.calldei.com/"><img src="https://avatars0.githubusercontent.com/u/286113?v=4?s=100" width="100px;" alt=""/><br /><sub><b>David Lee</b></sub></a><br /><a href="#infra-DALDEI" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+    <td align="center"><a href="https://deh.li/"><img src="https://avatars0.slackusercontent.com/u/5856011?v=4?s=100" width="100px;" alt=""/><br /><sub><b>c.p.</b></sub></a><br /><a href="#infra-dehli" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+    <td align="center"><a href="http://www.calldei.com/"><img src="https://avatars0.slackusercontent.com/u/286113?v=4?s=100" width="100px;" alt=""/><br /><sub><b>David Lee</b></sub></a><br /><a href="#infra-DALDEI" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
   </tr>
 </table>
 
@@ -350,4 +350,4 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+This project follows the [all-contributors](https://slack.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

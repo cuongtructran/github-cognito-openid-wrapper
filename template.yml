@@ -1,46 +1,46 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-    Github Cognito OpenID Wrapper (SSO)
+    Slack Cognito OpenID Wrapper (SSO)
 
-# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+# More info about Globals: https://slack.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
     Runtime: nodejs10.x
     Timeout: 15
     Environment:
       Variables:
-        GITHUB_CLIENT_ID:
-          Ref: GitHubClientIdParameter
-        GITHUB_CLIENT_SECRET:
-          Ref: GitHubClientSecretParameter
+        SLACK_CLIENT_ID:
+          Ref: SlackClientIdParameter
+        SLACK_CLIENT_SECRET:
+          Ref: SlackClientSecretParameter
         COGNITO_REDIRECT_URI:
           Ref: CognitoRedirectUriParameter
         GITHUB_API_URL:
-          Ref: GitHubUrlParameter
+          Ref: SlackUrlParameter
         GITHUB_LOGIN_URL:
-          Ref: GitHubLoginUrlParameter
+          Ref: SlackLoginUrlParameter
 
 Parameters:
-  GitHubClientIdParameter:
+  SlackClientIdParameter:
     Type: String
-  GitHubClientSecretParameter:
+  SlackClientSecretParameter:
     Type: String
   CognitoRedirectUriParameter:
     Type: String
-  GitHubUrlParameter:
+  SlackUrlParameter:
     Type: String
-    Default: "https://api.github.com"
+    Default: "https://api.slack.com"
     MinLength: 1
-  GitHubLoginUrlParameter:
+  SlackLoginUrlParameter:
     Type: String
-    Default: "https://github.com"
+    Default: "https://slack.com"
     MinLength: 1
   StageNameParameter:
     Type: String
 
 Resources:
-  GithubOAuthApi:
+  SlackOAuthApi:
     Type: AWS::Serverless::Api
     Properties:
       StageName: !Ref StageNameParameter
@@ -56,7 +56,7 @@ Resources:
           Properties:
             Path: /.well-known/openid-configuration
             Method: get
-            RestApiId: !Ref GithubOAuthApi
+            RestApiId: !Ref SlackOAuthApi
   Authorize:
     Type: AWS::Serverless::Function
     Properties:
@@ -68,7 +68,7 @@ Resources:
           Properties:
             Path: /authorize
             Method: get
-            RestApiId: !Ref GithubOAuthApi
+            RestApiId: !Ref SlackOAuthApi
   Token:
     Type: AWS::Serverless::Function
     Properties:
@@ -80,13 +80,13 @@ Resources:
           Properties:
             Path: /token
             Method: get
-            RestApiId: !Ref GithubOAuthApi
+            RestApiId: !Ref SlackOAuthApi
         PostResource:
           Type: Api
           Properties:
             Path: /token
             Method: post
-            RestApiId: !Ref GithubOAuthApi
+            RestApiId: !Ref SlackOAuthApi
   UserInfo:
     Type: AWS::Serverless::Function
     Properties:
@@ -98,13 +98,13 @@ Resources:
           Properties:
             Path: /userinfo
             Method: get
-            RestApiId: !Ref GithubOAuthApi
+            RestApiId: !Ref SlackOAuthApi
         PostResource:
           Type: Api
           Properties:
             Path: /userinfo
             Method: post
-            RestApiId: !Ref GithubOAuthApi
+            RestApiId: !Ref SlackOAuthApi
   Jwks:
     Type: AWS::Serverless::Function
     Properties:
@@ -116,9 +116,9 @@ Resources:
           Properties:
             Path: /.well-known/jwks.json
             Method: get
-            RestApiId: !Ref GithubOAuthApi
+            RestApiId: !Ref SlackOAuthApi
 
 Outputs:
-    GitHubShimIssuer:
-      Description: "GitHub OpenID Shim Issuer"
-      Value: !Sub "https://${GithubOAuthApi}.execute-api.${AWS::Region}.amazonaws.com/${StageNameParameter}"
+    SlackShimIssuer:
+      Description: "Slack OpenID Shim Issuer"
+      Value: !Sub "https://${SlackOAuthApi}.execute-api.${AWS::Region}.amazonaws.com/${StageNameParameter}"

@@ -1,7 +1,7 @@
 {
-  "projectName": "github-cognito-openid-wrapper",
+  "projectName": "slack-cognito-openid-wrapper",
   "projectOwner": "TimothyJones",
-  "repoType": "github",
+  "repoType": "slack",
   "files": [
     "README.md"
   ],
@@ -12,8 +12,8 @@
     {
       "login": "TimothyJones",
       "name": "Timothy Jones",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/914369?v=4",
-      "profile": "https://github.com/TimothyJones",
+      "avatar_url": "https://avatars1.slackusercontent.com/u/914369?v=4",
+      "profile": "https://slack.com/TimothyJones",
       "contributions": [
         "code",
         "doc",
@@ -25,8 +25,8 @@
     {
       "login": "bethesque",
       "name": "Beth Skurrie",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/446228?v=4",
-      "profile": "https://github.com/bethesque",
+      "avatar_url": "https://avatars1.slackusercontent.com/u/446228?v=4",
+      "profile": "https://slack.com/bethesque",
       "contributions": [
         "ideas"
       ]
@@ -34,8 +34,8 @@
     {
       "login": "derjust",
       "name": "Sebastian J.",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/2053353?v=4",
-      "profile": "https://github.com/derjust",
+      "avatar_url": "https://avatars0.slackusercontent.com/u/2053353?v=4",
+      "profile": "https://slack.com/derjust",
       "contributions": [
         "code",
         "infra"
@@ -44,7 +44,7 @@
     {
       "login": "DannyDouglass",
       "name": "Danny Douglass",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/266481?v=4",
+      "avatar_url": "https://avatars1.slackusercontent.com/u/266481?v=4",
       "profile": "http://dannydouglass.com/",
       "contributions": [
         "code"
@@ -53,7 +53,7 @@
     {
       "login": "livnoni",
       "name": "Livnoni",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/23154756?v=4",
+      "avatar_url": "https://avatars0.slackusercontent.com/u/23154756?v=4",
       "profile": "https://bridgecrew.io/",
       "contributions": [
         "code"
@@ -62,8 +62,8 @@
     {
       "login": "BFUculsion",
       "name": "Benjamin Follis",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/36120475?v=4",
-      "profile": "https://github.com/BFUculsion",
+      "avatar_url": "https://avatars0.slackusercontent.com/u/36120475?v=4",
+      "profile": "https://slack.com/BFUculsion",
       "contributions": [
         "infra"
       ]
@@ -71,7 +71,7 @@
     {
       "login": "cayblood",
       "name": "Carl Youngblood",
-      "avatar_url": "https://avatars3.githubusercontent.com/u/6947?v=4",
+      "avatar_url": "https://avatars3.slackusercontent.com/u/6947?v=4",
       "profile": "http://youngbloods.org/",
       "contributions": [
         "infra"
@@ -80,7 +80,7 @@
     {
       "login": "dehli",
       "name": "c.p.",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/5856011?v=4",
+      "avatar_url": "https://avatars0.slackusercontent.com/u/5856011?v=4",
       "profile": "https://deh.li/",
       "contributions": [
         "infra"
@@ -89,7 +89,7 @@
     {
       "login": "DALDEI",
       "name": "David Lee",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/286113?v=4",
+      "avatar_url": "https://avatars0.slackusercontent.com/u/286113?v=4",
       "profile": "http://www.calldei.com/",
       "contributions": [
         "infra"

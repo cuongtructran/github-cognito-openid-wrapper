@@ -1,21 +1,15 @@
 const axios = require('axios');
 const {
-  GITHUB_CLIENT_ID,
-  GITHUB_CLIENT_SECRET,
-  COGNITO_REDIRECT_URI,
-  GITHUB_API_URL,
-  GITHUB_LOGIN_URL
+  SLACK_CLIENT_ID,
+  SLACK_CLIENT_SECRET,
+  COGNITO_REDIRECT_URI
 } = require('./config');
 const logger = require('./connectors/logger');
 
-const getApiEndpoints = (
-  apiBaseUrl = GITHUB_API_URL,
-  loginBaseUrl = GITHUB_LOGIN_URL
-) => ({
-  userDetails: `${apiBaseUrl}/user`,
-  userEmails: `${apiBaseUrl}/user/emails`,
-  oauthToken: `${loginBaseUrl}/login/oauth/access_token`,
-  oauthAuthorize: `${loginBaseUrl}/login/oauth/authorize`
+const getApiEndpoints = () => ({
+  userDetails: `https://slack.com/api/users.info`,
+  oauthToken: `https://slack.com/api/oauth.access`,
+  oauthAuthorize: `https://slack.com/oauth/authorize`
 });
 
 const check = response => {
@@ -23,7 +17,7 @@ const check = response => {
   if (response.data) {
     if (response.data.error) {
       throw new Error(
-        `GitHub API responded with a failure: ${response.data.error}, ${
+        `Slack API responded with a failure: ${response.data.error}, ${
           response.data.error_description
         }`
       );
@@ -32,42 +26,44 @@ const check = response => {
     }
   }
   throw new Error(
-    `GitHub API responded with a failure: ${response.status} (${
+    `Slack API responded with a failure: ${response.status} (${
       response.statusText
     })`
   );
 };
 
-const gitHubGet = (url, accessToken) =>
+const slackGet = (url, accessToken) =>
   axios({
     method: 'get',
     url,
-    headers: {
-      Accept: 'application/vnd.github.v3+json',
-      Authorization: `token ${accessToken}`
+    params: {
+      token: accessToken,
+      user: 'U2T7NS9AA'
     }
   });
 
 module.exports = (apiBaseUrl, loginBaseUrl) => {
   const urls = getApiEndpoints(apiBaseUrl, loginBaseUrl || apiBaseUrl);
   return {
-    getAuthorizeUrl: (client_id, scope, state, response_type) =>
-      `${urls.oauthAuthorize}?client_id=${client_id}&scope=${encodeURIComponent(
+    getAuthorizeUrl: (client_id, scope, state, response_type) => {
+      scope.split('openid').join('');
+      return `${
+        urls.oauthAuthorize
+      }?client_id=${client_id}&scope=${encodeURIComponent(
         scope
-      )}&state=${state}&response_type=${response_type}`,
+      )}&state=${state}&response_type=${response_type}`;
+    },
     getUserDetails: accessToken =>
-      gitHubGet(urls.userDetails, accessToken).then(check),
-    getUserEmails: accessToken =>
-      gitHubGet(urls.userEmails, accessToken).then(check),
+      slackGet(urls.userDetails, accessToken).then(check),
     getToken: (code, state) => {
       const data = {
         // OAuth required fields
         grant_type: 'authorization_code',
         redirect_uri: COGNITO_REDIRECT_URI,
-        client_id: GITHUB_CLIENT_ID,
-        // GitHub Specific
+        client_id: SLACK_CLIENT_ID,
+        // Slack Specific
         response_type: 'code',
-        client_secret: GITHUB_CLIENT_SECRET,
+        client_secret: SLACK_CLIENT_SECRET,
         code,
         // State may not be present, so we conditionally include it
         ...(state && { state })
@@ -80,13 +76,13 @@ module.exports = (apiBaseUrl, loginBaseUrl) => {
         {}
       );
       return axios({
-        method: 'post',
+        method: 'get',
         url: urls.oauthToken,
+        params: data,
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json'
-        },
-        data
+        }
       }).then(check);
     }
   };
